@@ -1,0 +1,65 @@
+{
+  "name": "@theluckystrike/mcp-work-order",
+  "version": "0.20.0",
+  "description": "Job orders for trades and field work: parts, labour, status, completion report, invoice payload.",
+  "type": "module",
+  "bin": {
+    "mcp-work-order": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./lib": {
+      "types": "./dist/lib.d.ts",
+      "default": "./dist/lib.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json --declaration && node -e \"import('node:fs').then(f=>f.chmodSync('dist/index.js',0o755))\"",
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "work-order",
+    "job-card",
+    "field-service",
+    "trades",
+    "labour",
+    "invoicing"
+  ],
+  "license": "MIT",
+  "author": "theluckystrike",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/mcp-servers",
+    "directory": "servers/work-order"
+  },
+  "homepage": "https://github.com/theluckystrike/mcp-servers/tree/main/servers/work-order",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@theluckystrike/mcp-billing-docs": "file:vendor/mcp-billing-docs",
+    "@theluckystrike/mcp-invoice": "file:vendor/mcp-invoice",
+    "@theluckystrike/mcp-license": "file:vendor/mcp-license",
+    "@theluckystrike/mcp-quotes": "file:vendor/mcp-quotes",
+    "@theluckystrike/mcp-timezone": "file:vendor/mcp-timezone",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  }
+}

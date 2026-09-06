@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.theluckystrike/service-report",
+  "description": "Field service reports: hours, materials, sign-off, and the invoice the visit turns into.",
+  "version": "0.20.0",
+  "repository": {
+    "url": "https://github.com/theluckystrike/mcp-servers",
+    "source": "github",
+    "subfolder": "servers/work-order"
+  },
+  "websiteUrl": "https://mcp.zovo.one/buy/work-order",
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/theluckystrike/mcp-servers/releases/download/v0.20.0/work-order.mcpb",
+      "version": "0.20.0",
+      "fileSha256": "ed19538989843fef7fdf69109c191cfd870730f4a595b385dc2dbcb6e5ade578",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "MCP_LICENSE_KEY",
+          "description": "Optional Pro license key (MCPL1....). Verified offline.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
