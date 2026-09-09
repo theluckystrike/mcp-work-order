@@ -1,6 +1,6 @@
 {
   "name": "@theluckystrike/mcp-work-order",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "Job orders for trades and field work: parts, labour, status, completion report, invoice payload.",
   "type": "module",
   "bin": {

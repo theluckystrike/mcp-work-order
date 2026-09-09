@@ -22,6 +22,8 @@ Nothing is invented and nothing is stored twice: the value, the hours, the mater
 the VAT are derived from the lines on every call, and the invoice payload's unit prices are
 already the billed units, so the invoice reproduces the work order to the minor unit.
 
+npm publish for `@theluckystrike/mcp-work-order` is pending, so `npx -y @theluckystrike/mcp-work-order` returns 404 today. Until then, the `.mcpb` one-click bundle or a clone+build is the working path.
+
 ## Install
 
 ### Claude Desktop

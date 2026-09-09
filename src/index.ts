@@ -268,7 +268,7 @@ server.registerTool("work_order_create", {
 
 server.registerTool("work_order_add_line", {
   title: "Add a parts or labour line",
-  description: "Add one line to a work order: parts with a quantity and a unit cost in minor units and an optional markup percent, or labour with hours and an hourly rate. Free.",
+  description: "Add one line: parts with quantity, unit_cost_minor in whole MINOR units and optional markup, or labour with hours and rate_minor. A line on an invoiced order, or dated before the request, is refused.",
   inputSchema: {
     work_order: orderArg,
     kind: z.enum(["parts", "labour"]).describe("parts for materials, labour for time on the job"),
@@ -353,7 +353,7 @@ server.registerTool("work_order_add_line", {
 
 server.registerTool("work_order_status", {
   title: "Move a work order along",
-  description: "Move a work order one step: draft to scheduled to in_progress to done to invoiced, stamping the date and a note. A skipped or backwards step is refused by name. Free.",
+  description: "Move one work order exactly one step: draft, scheduled, in_progress, done, invoiced, stamping date and note. A skipped, backwards or backdated step is refused and nothing is written. Free.",
   inputSchema: {
     work_order: orderArg,
     status: z.enum(["draft", "scheduled", "in_progress", "done", "invoiced"]).describe("The status to move to. It must be the next one along"),
@@ -400,7 +400,7 @@ server.registerTool("work_order_status", {
 
 server.registerTool("work_order_get", {
   title: "Show one work order",
-  description: "Show one work order in full: the client and the site, every parts and labour line with its billed unit, the hours, the materials, the net and VAT, and the status history. Free.",
+  description: "Return one work order in full by WO number or client: the site, every parts and labour line with the unit billed, hours, materials, net and VAT, and the status history. Reads only. Free.",
   inputSchema: { work_order: orderArg },
 }, async (a) => {
   try {
@@ -410,7 +410,7 @@ server.registerTool("work_order_get", {
 
 server.registerTool("work_order_list", {
   title: "List work orders",
-  description: "List work orders with their status, hours and value. Filter by status, by client, and by a requested-date range. Free.",
+  description: "List work orders newest requested first: status, priority, client, site, hours, labour, materials and net value, with totals per currency. Filter by status, client and requested-date range. Free.",
   inputSchema: {
     status: z.enum(["draft", "scheduled", "in_progress", "done", "invoiced", "open"]).optional().describe("One status, or open for draft, scheduled and in_progress together"),
     client: str("client", MAX_NAME).optional().describe("Only jobs whose client name contains this text"),
@@ -453,7 +453,7 @@ server.registerTool("work_order_list", {
 
 server.registerTool("work_order_delete", {
   title: "Delete a draft work order",
-  description: "Delete a work order raised by mistake. Only a draft with no lines can go: once there is a line or a status past draft, the job has a history and is corrected, not erased. Free on every tier.",
+  description: "Delete a DRAFT work order with no lines, freeing an open slot. One past draft is refused, naming the date it got there, and so is one carrying lines. The WO number is never reissued. work_order_status moves it on.",
   inputSchema: { work_order: orderArg },
 }, async (a) => {
   try {

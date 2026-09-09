@@ -2,19 +2,19 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.theluckystrike/work-order",
   "description": "Job orders for trades and field work: parts, labour, status, completion report, invoice payload.",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "repository": {
     "url": "https://github.com/theluckystrike/mcp-servers",
     "source": "github",
     "subfolder": "servers/work-order"
   },
-  "websiteUrl": "https://mcp.zovo.one/buy/work-order",
+  "websiteUrl": "https://mcp.zovo.one/s/work-order",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@theluckystrike/mcp-work-order",
-      "version": "0.20.0",
+      "version": "0.21.0",
       "transport": {
         "type": "stdio"
       },

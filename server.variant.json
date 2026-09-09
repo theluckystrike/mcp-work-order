@@ -2,19 +2,18 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.theluckystrike/job-card",
   "description": "Run job cards end to end: schedule the visit, log parts and hours, sign it off, bill it.",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "repository": {
     "url": "https://github.com/theluckystrike/mcp-servers",
     "source": "github",
     "subfolder": "servers/work-order"
   },
-  "websiteUrl": "https://mcp.zovo.one/buy/work-order",
+  "websiteUrl": "https://mcp.zovo.one/s/work-order",
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/theluckystrike/mcp-servers/releases/download/v0.20.0/work-order.mcpb",
-      "version": "0.20.0",
-      "fileSha256": "ed19538989843fef7fdf69109c191cfd870730f4a595b385dc2dbcb6e5ade578",
+      "identifier": "https://github.com/theluckystrike/mcp-servers/releases/download/v0.21.0/work-order.mcpb",
+      "version": "0.21.0",
       "transport": {
         "type": "stdio"
       },
@@ -25,7 +24,8 @@
           "isRequired": false,
           "isSecret": true
         }
-      ]
+      ],
+      "fileSha256": "b6b6b8f684f3aee31c86c14661f1d37e145d46a425bbcdc7d5a7df03546fb524"
     }
   ]
 }
