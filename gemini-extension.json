@@ -1,0 +1,22 @@
+{
+  "name": "mcp-work-order",
+  "version": "0.21.0",
+  "description": "MCP server for work orders and job cards for trades and field service. Job orders for trades and field work, priced the way the invoice will be.",
+  "settings": [
+    {
+      "name": "mcp.zovo.one token",
+      "description": "A free anonymous token from https://mcp.zovo.one/mcp/token, or your Pro key. One token is one data space, and it is refreshed for another 30 days on every write.",
+      "envVar": "ZOVO_MCP_TOKEN",
+      "sensitive": true
+    }
+  ],
+  "mcpServers": {
+    "work-order": {
+      "httpUrl": "https://mcp.zovo.one/mcp/work-order",
+      "headers": {
+        "Authorization": "Bearer ${ZOVO_MCP_TOKEN}"
+      },
+      "description": "Job orders for trades and field work, priced the way the invoice will be."
+    }
+  }
+}
