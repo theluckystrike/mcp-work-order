@@ -1,6 +1,6 @@
 {
   "name": "mcp-work-order",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "MCP server for work orders and job cards for trades and field service. Job orders for trades and field work, priced the way the invoice will be.",
   "settings": [
     {

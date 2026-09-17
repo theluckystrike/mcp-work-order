@@ -755,7 +755,7 @@ server.registerTool("credit_note_delete", {
 /* --------------------------------------------------------- purchase orders */
 server.registerTool("purchase_order_create", {
     title: "Raise a purchase order",
-    description: "Raise a purchase order to a supplier and return its PO number. unit_price is in MAJOR units; currency, VAT and the buyer block come from the shared profile. Free: 5 documents a calendar month.",
+    description: "Raise a purchase order to a supplier from items and return its PO number and totals. unit_price is in MAJOR units; currency, VAT and the buyer block come from the shared profile. Free: 5 documents a calendar month.",
     inputSchema: {
         supplier: z.string().min(1, "supplier is required").max(MAX_PARTY_NAME, `supplier must be ${MAX_PARTY_NAME} characters or fewer`)
             .describe("Supplier name or client id. A name the invoice server already knows brings its address, email and VAT id onto the order"),

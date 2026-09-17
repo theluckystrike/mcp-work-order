@@ -2,6 +2,8 @@
 
 Say "quote Acme for 12 hours at 90 EUR plus a 300 EUR setup, 23% VAT, good for 14 days" and get a numbered quote you can send today: the line table with VAT per rate, the total in integer minor units, a validity date computed in your own timezone, a plain-text version to paste straight into an email and, on Pro, the same A4 PDF layout your invoices use. When the client says yes, `quote_accept` turns it into a real invoice in the [mcp-invoice](../invoice) store, under the same client list and the same number series, with the numbers copied from the quote rather than recomputed. Everything is stored in plain JSON files on your own machine; nothing is uploaded anywhere.
 
+**In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Fquotes-estimates-proposals-vat-win-rate/versions/latest)** (`io.github.theluckystrike/quotes-estimates-proposals-vat-win-rate`).
+
 ![quotes demo](../../assets/demo-quotes.gif)
 
 **Send a priced, VAT-correct quote from chat, and turn the yes into an invoice with one call.**

@@ -43,6 +43,7 @@ Read-only mirror of [mcp-servers/servers/work-order](https://github.com/thelucky
 
 <!-- mirror-seo:end -->
 
+**In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Fwork-order/versions/latest)** (`io.github.theluckystrike/work-order`).
 Job orders for trades and field work, kept the way a job card is kept. Raise a work order
 against a client (the same client record your invoices use), give it a site address, the
 date it was asked for, what the job is and how urgent. Log what the job actually used as it

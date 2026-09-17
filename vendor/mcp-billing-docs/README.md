@@ -15,6 +15,8 @@ Built on `@theluckystrike/mcp-invoice/lib`: the money, VAT, currency and formatt
 invoice server's, not a second copy of it, so a credit note and the invoice it reverses agree to the
 minor unit.
 
+**In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Fbilling-docs-credit-notes-purchase-orders/versions/latest)** (`io.github.theluckystrike/billing-docs-credit-notes-purchase-orders`).
+
 ![billing-docs demo](../../assets/demo-billing-docs.gif)
 
 npm publish for `@theluckystrike/mcp-billing-docs` is pending, so `npx -y @theluckystrike/mcp-billing-docs` returns 404 today. Until then, the `.mcpb` one-click bundle or a clone+build is the working path.

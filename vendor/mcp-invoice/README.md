@@ -2,6 +2,8 @@
 
 Say "make an invoice for Acme, 12 hours at 90 EUR, due in 14 days" and get a real PDF you can send. This MCP server stores your business profile and your clients, allocates a sequential invoice number that is never reused, computes the subtotal, any discount, one tax line per VAT rate and the total in integer minor units, and renders an A4 PDF with your issuer and payment details, a wrapping item table and a proper totals block. It also tracks payments and, on Pro, reports what is overdue and by how many days. Everything is stored in plain JSON files on your own machine; nothing is uploaded anywhere.
 
+**In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Finvoice-pdf-billing-generator/versions/latest)** (`io.github.theluckystrike/invoice-pdf-billing-generator`).
+
 ![invoice demo](../../assets/demo-invoice.gif)
 
 **Create numbered invoices with tax lines and a real PDF from chat -- no invoicing SaaS required.**
@@ -219,7 +221,7 @@ All data stays local, in `${XDG_DATA_HOME:-~/.local/share}/mcp-servers/invoice/`
 - [mcp-time-tracker](../time-tracker/README.md) -- `invoice_summary` output there maps directly onto `invoice_create` line items here.
 - [mcp-spreadsheet](../spreadsheet/README.md) -- pull line items or client lists out of a sheet before invoicing.
 - [mcp-price-tracker](../price-tracker/README.md) -- invoice a client for something you tracked the price of.
-- [office-suite](../office-suite/README.md) -- all four servers behind one install, one config entry.
+- [office-suite](../office-suite/README.md) -- every sibling server behind one install, one config entry.
 - Guide: [Create an invoice PDF from a chat message with an MCP server](https://mcp.zovo.one/guides/invoice-pdf-from-chat)
 
 ## FAQ
