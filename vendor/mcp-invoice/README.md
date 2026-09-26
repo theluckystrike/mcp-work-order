@@ -1,22 +1,28 @@
-# mcp-invoice
+# Generate & send invoices from Claude with a free MCP server
+
+**Listed on the [AI Product Index](https://index.percall.dev/l/zovo-invoice.html)** — live remote endpoint at [mcp.zovo.one/s/invoice](https://mcp.zovo.one/s/invoice), free tier, no signup.
+
+**Featured on [Awesome MCP Servers](mcpservers.org)** — [directory listing](https://mcpservers.org/servers/github-com-theluckystrike-mcp-servers-tree-main-servers-invoice) | [live hosted endpoint](https://mcp.zovo.one/s/invoice), free tier, no signup.
+
+
 
 Say "make an invoice for Acme, 12 hours at 90 EUR, due in 14 days" and get a real PDF you can send. This MCP server stores your business profile and your clients, allocates a sequential invoice number that is never reused, computes the subtotal, any discount, one tax line per VAT rate and the total in integer minor units, and renders an A4 PDF with your issuer and payment details, a wrapping item table and a proper totals block. It also tracks payments and, on Pro, reports what is overdue and by how many days. Everything is stored in plain JSON files on your own machine; nothing is uploaded anywhere.
 
-**In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Finvoice-pdf-billing-generator/versions/latest)** (`io.github.theluckystrike/invoice-pdf-billing-generator`).
+In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Finvoice-pdf-billing-generator/versions/latest) (`io.github.theluckystrike/invoice-pdf-billing-generator`).
 
 ![invoice demo](../../assets/demo-invoice.gif)
 
-**Create numbered invoices with tax lines and a real PDF from chat -- no invoicing SaaS required.**
+Create numbered invoices with tax lines and a real PDF from chat, no invoicing SaaS required.
 
 ## 60-second install
 
 npm publish for `@theluckystrike/mcp-invoice` is pending. Until then, the `.mcpb` one-click bundle or a clone+build
-is the working path -- both are verified below.
+is the working path, both are verified below.
 
-**One-click (.mcpb):** download `invoice.mcpb` from the latest release and double-click it in Claude Desktop:
+One-click (.mcpb): download `invoice.mcpb` from the latest release and double-click it in Claude Desktop:
 https://github.com/theluckystrike/mcp-servers/releases/latest
 
-**Claude Desktop** (`claude_desktop_config.json`):
+(`claude_desktop_config.json`):
 
 ```json
 {
@@ -29,13 +35,13 @@ https://github.com/theluckystrike/mcp-servers/releases/latest
 }
 ```
 
-**Claude Code:**
+Claude Code:
 
 ```sh
 claude mcp add invoice -- npx -y @theluckystrike/mcp-invoice
 ```
 
-**Cursor** (`.cursor/mcp.json`):
+(`.cursor/mcp.json`):
 
 ```json
 {
@@ -131,7 +137,7 @@ client_add before you send this. PDF: INV-2026-0001.pdf
 ```
 
 The arithmetic: 12 x 90 = 1080.00, plus 300.00 = 1380.00 subtotal; 23% of 1380.00 = 317.40; total
-1697.40 EUR. Every amount on the PDF and in the text response carries its currency code -- nothing is
+1697.40 EUR. Every amount on the PDF and in the text response carries its currency code, nothing is
 ever shown as a bare number.
 
 ## Free vs Pro
@@ -147,8 +153,6 @@ ever shown as a bare number.
 
 Pro is a one-time $19, or $39 for every server in the collection, lifetime.
 
-**Get Pro: https://mcp.zovo.one/buy/invoice**
-
 ## Numbers and money
 
 Invoice numbers are `PREFIX-YYYY-NNNN`. The counter is persisted per prefix and year and is written before the invoice is stored, so a crash burns a number rather than reusing one; existing numbers are also scanned so a restored data file can never hand back a number that is already on a sent document.
@@ -163,10 +167,10 @@ Business profile, clients, invoices and the number counter live under
 `${XDG_DATA_HOME:-~/.local/share}/mcp-servers/invoice/` as separate JSON files, plus a `pdf/` subfolder
 holding the rendered PDFs. Every mutating call (`business_set`, `client_add`, `invoice_create`,
 `invoice_from_hours`, `invoice_mark_paid`) runs inside `locked()`, which takes an advisory lock file at
-`.../invoice/.lock` for the duration of the call -- this is what makes number allocation safe when two
+`.../invoice/.lock` for the duration of the call, this is what makes number allocation safe when two
 invoices are created in the same second, since the counter read, increment and invoice write all happen
 under one lock. Saves go to a temporary file and are renamed into place. To back up your invoicing data,
-copy the whole `invoice/` data directory, including `pdf/` if you want the rendered files too -- they can
+copy the whole `invoice/` data directory, including `pdf/` if you want the rendered files too, they can
 always be regenerated from the stored records with `invoice_pdf`.
 
 If one of those JSON files is unreadable or not valid JSON, it is never treated as "empty". The file is
@@ -183,12 +187,12 @@ client list.
   record identical to a stored one, and `client_delete` removes an unused client, so a mistyped or duplicated
   record can always be undone without a licence key. A client any document references cannot be deleted.
 - Free PDFs carry a small "Generated with mcp-invoice" footer line; Pro removes it and adds a logo.
-- Creating an invoice for a client name the server has never seen creates that client with no address --
+- Creating an invoice for a client name the server has never seen creates that client with no address;
   the response says so and names `client_add` as the fix, but nothing blocks you from sending a PDF with
   a bare-name BILL TO block if you ignore the note.
-- There is no email-sending, payment-link or accounting-software sync in this server: it produces the PDF
+- This server skips email-sending, payment-link and accounting-software sync: it produces the PDF
   and the record; getting it to the client is up to you.
-- Currency conversion is not performed anywhere -- an invoice's currency is fixed at creation and every
+- Currency conversion is not performed anywhere, an invoice's currency is fixed at creation and every
   line must use amounts already in that currency.
 
 ## Troubleshooting
@@ -218,32 +222,27 @@ All data stays local, in `${XDG_DATA_HOME:-~/.local/share}/mcp-servers/invoice/`
 
 ## Pairs with
 
-- [mcp-time-tracker](../time-tracker/README.md) -- `invoice_summary` output there maps directly onto `invoice_create` line items here.
-- [mcp-spreadsheet](../spreadsheet/README.md) -- pull line items or client lists out of a sheet before invoicing.
-- [mcp-price-tracker](../price-tracker/README.md) -- invoice a client for something you tracked the price of.
-- [office-suite](../office-suite/README.md) -- every sibling server behind one install, one config entry.
+- [mcp-time-tracker](../time-tracker/README.md), `invoice_summary` output there maps directly onto `invoice_create` line items here.
+- [mcp-spreadsheet](../spreadsheet/README.md), pull line items or client lists out of a sheet before invoicing.
+- [mcp-price-tracker](../price-tracker/README.md), invoice a client for something you tracked the price of.
+- [office-suite](../office-suite/README.md), every sibling server behind one install, one config entry.
 - Guide: [Create an invoice PDF from a chat message with an MCP server](https://mcp.zovo.one/guides/invoice-pdf-from-chat)
 
 ## FAQ
 
-**Can I put several VAT rates on one invoice?**
 Yes. Tax rate is per line item. The totals block prints one tax line per distinct rate, so a 23% line
 and a 0% reverse-charge line appear separately and the total adds up.
 
-**Is the PDF good enough to send to a client's accounts department?**
 It is a single page A4 with issuer and client blocks, dates, a line table with per-line tax, subtotal,
 tax lines, total, and payment details with IBAN and reference. Add the client's address with `client_add`
 first, otherwise BILL TO shows only the name.
 
-**What is the invoice number format and can I change it?**
 `INV-YYYY-NNNN`, allocated in sequence and never reused. The prefix is configurable with `business_set`;
 a prefix other than `INV` is a Pro feature.
 
-**Does anything get uploaded when the PDF is rendered?**
 No. Rendering is local with `pdfkit`, and the invoice records live in
 `~/.local/share/mcp-servers/invoice/`. The server makes no network calls at all.
 
-**How exact is the money arithmetic?**
 Amounts are integer minor units. Each line is rounded once, then lines are summed, so 12 h at 90 EUR
 plus 300 EUR with 23% VAT gives 1380.00 plus 317.40 = 1697.40 with no floating point residue.
 
@@ -258,3 +257,19 @@ resume and contract letterheads. Set it once with `business_set` (invoice or doc
 repeat it anywhere else. An email address is only ever taken from that profile or from an explicit
 argument; when none is stored, documents show `[add: email]` and the tool says so rather than
 letting anyone improvise an address.
+
+## Frequently asked questions
+
+### Is there a free MCP server for invoices?
+
+Yes. The invoice server at mcp.zovo.one is a free MCP server for invoices: create line-item invoices with tax and VAT lines from Claude or any MCP client, render a professional PDF, and track payment status. Three invoices per calendar month are free, no install required — you paste a hosted URL into your client.
+
+### How do I generate an invoice from Claude?
+
+Connect the hosted endpoint https://mcp.zovo.one/mcp/invoice (copy the tokenized URL from mcp.zovo.one/mcp/connect), then say: 'Invoice Acme for 12 hours at 90 EUR with 23% VAT, due in 14 days.' Claude creates the numbered invoice and returns a PDF.
+
+## Use these docs as an MCP server
+
+Any MCP client (Claude, Cursor, Windsurf, VS Code) can read this repository's documentation directly via GitMCP — no install:
+
+- Docs MCP URL: https://gitmcp.io/theluckystrike/mcp-invoice

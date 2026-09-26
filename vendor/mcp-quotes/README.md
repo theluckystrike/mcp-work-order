@@ -4,19 +4,22 @@ Say "quote Acme for 12 hours at 90 EUR plus a 300 EUR setup, 23% VAT, good for 1
 
 **In the [official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.theluckystrike%2Fquotes-estimates-proposals-vat-win-rate/versions/latest)** (`io.github.theluckystrike/quotes-estimates-proposals-vat-win-rate`).
 
+**Listed on the [AI Product Index](https://index.percall.dev/l/zovo-quotes.html)** — live remote endpoint at [mcp.zovo.one/s/quotes](https://mcp.zovo.one/s/quotes), free tier, no signup.
+
+
 ![quotes demo](../../assets/demo-quotes.gif)
 
-**Send a priced, VAT-correct quote from chat, and turn the yes into an invoice with one call.**
+Send a priced, VAT-correct quote from chat, and turn the yes into an invoice with one call.
 
 ## 60-second install
 
 npm publish for `@theluckystrike/mcp-quotes` is pending. Until then, the `.mcpb` one-click bundle or a
 clone+build is the working path.
 
-**One-click (.mcpb):** download `quotes.mcpb` from the latest release and double-click it in Claude Desktop:
+One-click (.mcpb): download `quotes.mcpb` from the latest release and double-click it in Claude Desktop:
 https://github.com/theluckystrike/mcp-servers/releases/latest
 
-**Claude Desktop** (`claude_desktop_config.json`):
+(`claude_desktop_config.json`):
 
 ```json
 {
@@ -29,13 +32,13 @@ https://github.com/theluckystrike/mcp-servers/releases/latest
 }
 ```
 
-**Claude Code:**
+Claude Code:
 
 ```sh
 claude mcp add quotes -- npx -y @theluckystrike/mcp-quotes
 ```
 
-**Cursor** (`.cursor/mcp.json`): the same entry as Claude Desktop.
+(`.cursor/mcp.json`): the same entry as Claude Desktop.
 
 From source:
 
@@ -135,19 +138,17 @@ removes a draft nobody has seen and gives the slot straight back.
 
 Pro is a one-time $19, or $39 for every server in the collection, lifetime.
 
-**Get Pro: https://mcp.zovo.one/buy/quotes**
-
 ## One measured thing: why an accepted quote is copied, not recomputed
 
-`quote_accept` writes the invoice from the quote's stored lines. The obvious alternative -- recompute the
-totals from the prices at acceptance time -- was measured and rejected, because the VAT rate it would use is
+`quote_accept` writes the invoice from the quote's stored lines. The obvious alternative, recompute the
+totals from the prices at acceptance time, was measured and rejected, because the VAT rate it would use is
 the one in the shared business profile *today*, not the one the client was quoted.
 
 Measured (`test/adversarial.test.mjs`, "a VAT rate change between quote and acceptance never moves the
 agreed total"): a quote of EUR 1,000.00 net is issued with the profile's default rate of 23%, so the client
-is given **EUR 1,230.00**. The profile's `default_tax_rate` is then changed to 8% -- a rate change, a new
-client class, a corrected setting -- before the client answers. Recomputing at acceptance invoices
-**EUR 1,080.00**: EUR 150.00 below the document they agreed to, on one quote, with nothing on either record
+is given **EUR 1,230.00**. The profile's `default_tax_rate` is then changed to 8%, a rate change, a new
+client class, a corrected setting, before the client answers. Recomputing at acceptance invoices
+EUR 150.00 below the document they agreed to, on one quote, with nothing on either record
 saying why they differ. Copying the stored lines invoices EUR 1,230.00 and the assertion holds
 `tax_lines[0].rate === 23`.
 
@@ -162,7 +163,7 @@ never hand back an id that is already on a document a client has seen. The year 
 deliberately: a bare `Q-0001` reset every January collides with last January's quote.
 
 Money is integer minor units end to end, and how many make one unit comes from the ISO 4217 table in
-[mcp-invoice](../invoice) -- 2 for most currencies, 0 for JPY, KRW, ISK and the rest, 3 for KWD and the
+[mcp-invoice](../invoice), 2 for most currencies, 0 for JPY, KRW, ISK and the rest, 3 for KWD and the
 Gulf dinars, 4 for CLF and UYW. There is no second copy of that table, of the VAT arithmetic or of the money
 formatter here: `computeTotals`, `currencyDecimals` and `formatMoney` are imported from
 `@theluckystrike/mcp-invoice/lib`, so a quote and the invoice it becomes round identically, per line and
@@ -188,8 +189,8 @@ renamed into place. Measured: 40 quotes created by two processes against one dat
 and 40 unique ids (`test/concurrency.test.mjs`).
 
 A store file that is not valid JSON is never treated as "no quotes". It is moved aside byte-for-byte as
-`quotes.json.corrupt-<timestamp>`, a `.corrupt` marker is written beside it, and every later call -- reads
-included -- fails with `restore a good copy ... then delete the marker` until a human resolves it.
+`quotes.json.corrupt-<timestamp>`, a `.corrupt` marker is written beside it, and every later call, reads
+included, fails with `restore a good copy ... then delete the marker` until a human resolves it.
 
 ## Limits and honest caveats
 
@@ -212,3 +213,9 @@ All data stays local: plain JSON files in your own data directory. No account, n
 of any kind. License keys are verified offline.
 
 Built by [theluckystrike](https://github.com/theluckystrike). Support: support@zovo.one
+
+## Use these docs as an MCP server
+
+Any MCP client (Claude, Cursor, Windsurf, VS Code) can read this repository's documentation directly via GitMCP — no install:
+
+- Docs MCP URL: https://gitmcp.io/theluckystrike/mcp-quotes

@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.theluckystrike/service-report",
   "description": "Field service reports: hours, materials, sign-off, and the invoice the visit turns into.",
-  "version": "0.22.0",
+  "version": "0.22.2",
   "repository": {
     "url": "https://github.com/theluckystrike/mcp-servers",
     "source": "github",
@@ -25,13 +25,13 @@
           "isSecret": true
         }
       ],
-      "fileSha256": "1009fecbcc696aded3b0dfa0f802088fa257c2eb0662c96d8e74fdc2392decb8"
+      "fileSha256": "40c06e0f5f32da3b8abff871c73b3176f0adfc9cff53c58f10be0a9b29f16577"
     }
   ],
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.zovo.one/mcp/work-order",
+      "url": "https://mcp.zovo.one/mcp/service-report",
       "headers": [
         {
           "name": "Authorization",

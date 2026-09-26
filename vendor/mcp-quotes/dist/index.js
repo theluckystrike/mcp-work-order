@@ -296,7 +296,7 @@ function issueInvoiceFromQuote(q, dueDays, issue) {
 }
 /* ------------------------------------------------------------------- server */
 const server = new McpServer({ name: "mcp-quotes", version: VERSION }, { capabilities: { tools: {}, resources: {}, prompts: {} } });
-server.registerTool("quote_create", {
+server.registerTool("quote_create", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Create a quote",
     description: "Store a quote for client from items and return its Q number, VAT and totals. unit_price is in MAJOR units; currency, VAT and issuer come from the shared profile. A duplicate of an open quote is refused. Free: 5 open.",
     inputSchema: {
@@ -403,7 +403,7 @@ server.registerTool("quote_create", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_list", {
+server.registerTool("quote_list", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "List quotes",
     description: "List quotes newest first: id, client, dates, state, days left while open, currency, total and the invoice number once accepted. State is read against today, so a lapsed quote shows as expired.",
     inputSchema: {
@@ -433,7 +433,7 @@ server.registerTool("quote_list", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_get", {
+server.registerTool("quote_get", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Show one quote",
     description: "Return one quote in full by Q number or exact client name: lines with unit price and VAT, totals, dates, the state today with days left, notes, and the invoice it became once accepted. Reads only.",
     inputSchema: { id: z.string().describe("Quote id such as Q-2026-0001, or an exact client name") },
@@ -449,7 +449,7 @@ server.registerTool("quote_get", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_update", {
+server.registerTool("quote_update", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Change an open quote",
     description: "Revise a quote that is still open: line items, currency, discount, VAT default, validity or notes. Totals are recomputed. An accepted or declined quote is never edited.",
     inputSchema: {
@@ -525,7 +525,7 @@ server.registerTool("quote_update", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_send_text", {
+server.registerTool("quote_send_text", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Plain-text quote to paste into email",
     description: "Turn a quote into a plain-text summary to paste into an email: the line table, VAT lines, total and validity date, with a sign-off from the shared profile. Free; quote_pdf writes the A4 document.",
     inputSchema: {
@@ -598,7 +598,7 @@ server.registerTool("quote_send_text", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_accept", {
+server.registerTool("quote_accept", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Accept a quote",
     description: "Mark a quote accepted and turn it into an invoice: created directly in the invoice server when its store is present, otherwise returned as invoice_create-ready line items. The numbers are copied, never recomputed.",
     inputSchema: {
@@ -677,7 +677,7 @@ server.registerTool("quote_accept", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_decline", {
+server.registerTool("quote_decline", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Decline a quote",
     description: "Mark a quote lost, with a reason kept on the record, freeing a free-tier open slot and counting in the win rate. An accepted quote is refused, naming the invoice it became. Free on every tier.",
     inputSchema: {
@@ -722,7 +722,7 @@ server.registerTool("quote_decline", {
  * what a client was told can be deleted, and it genuinely frees the slot, because the cap
  * counts quotes in the open state and the row is gone from the store.
  */
-server.registerTool("quote_delete", {
+server.registerTool("quote_delete", { annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
     title: "Delete a draft quote",
     description: "Delete a draft quote that was never sent, accepted, invoiced or exported, and give its free open-quote slot back. A quote with any of those is refused with the dependent named. The id is never reissued.",
     inputSchema: {
@@ -760,7 +760,7 @@ server.registerTool("quote_delete", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_pdf", {
+server.registerTool("quote_pdf", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Render the quote as a PDF",
     description: "Call this tool to write one quote as an A4 PDF and return the path: the invoice layout with the validity date, an acceptance block, and an EXPIRED marking once it has lapsed. Pro.",
     inputSchema: {
@@ -800,7 +800,7 @@ server.registerTool("quote_pdf", {
         return fail(e.message);
     }
 });
-server.registerTool("quote_report", {
+server.registerTool("quote_report", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Quote pipeline and win rate",
     description: "Totals per currency for open, accepted, declined and expired quotes, with counts, the value still open and the win rate. Free covers the current calendar year to date; Pro reports over any date range.",
     inputSchema: {

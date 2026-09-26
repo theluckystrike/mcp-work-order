@@ -112,3 +112,9 @@ All data stays local: `${XDG_DATA_HOME:-~/.local/share}/mcp-servers/billing-docs
 key, no network call, ever. Licence keys are verified offline.
 
 Built by [theluckystrike](https://github.com/theluckystrike). Support: support@zovo.one
+
+## Use these docs as an MCP server
+
+Any MCP client (Claude, Cursor, Windsurf, VS Code) can read this repository's documentation directly via GitMCP — no install:
+
+- Docs MCP URL: https://gitmcp.io/theluckystrike/mcp-billing-docs

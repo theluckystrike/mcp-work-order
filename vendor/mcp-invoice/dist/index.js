@@ -26,7 +26,9 @@ const gate = createLicenseGate({ product: "invoice" });
  */
 export const PROFILE_READERS = [
     "asset-register", "bank-statement", "barcode", "bill-of-sale", "calendar", "catalogue", "change-order", "checklist", "clauses", "currency", "delivery-schedule", "docx", "dunning-letters", "expense-tracker",
-    "image", "kanban", "packing-list", "pdf", "per-diem", "petty-cash", "quotes", "resume", "statement-of-account", "time-tracker", "timezone",
+    "image", "kanban", "leave", "packing-list", "pdf", "per-diem", "petty-cash", "quotes", "resume", "statement-of-account", "time-tracker", "timezone",
+    "purchase-requisition",
+    "purchaseRequisition",
     "work-order",
 ];
 /**
@@ -134,7 +136,7 @@ function expandPath(p) {
 }
 const server = new McpServer({ name: "mcp-invoice", version: VERSION }, { capabilities: { tools: {}, resources: {}, prompts: {} } });
 /* ------------------------------------------------------------------ business */
-server.registerTool("business_set", {
+server.registerTool("business_set", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Set your business details",
     description: "The ONE business profile for the whole suite: name, address, VAT id, bank details and defaults (currency, tax rate, terms, prefix, timezone). Saved to the shared profile every other server reads. Call it once, first.",
     inputSchema: z.object({
@@ -261,7 +263,7 @@ function normTaxId(v) {
 function clientFingerprint(c) {
     return [normText(c.name), normText(c.address), normText(c.email), normTaxId(c.vat_id)].join(" | ");
 }
-server.registerTool("client_add", {
+server.registerTool("client_add", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Add a client",
     description: "Store a client so invoice_create can refer to them by name. Re-adding the same name updates the stored address, email and VAT id; a record identical to a stored one is refused, naming the id that already holds it.",
     inputSchema: {
@@ -386,7 +388,7 @@ function resolveForDelete(ref) {
     }
     return { client: pool[0] };
 }
-server.registerTool("client_delete", {
+server.registerTool("client_delete", { annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
     title: "Delete a client",
     description: "Delete one stored client that nothing refers to. A client named on any invoice, quote, credit note, purchase order, deposit, statement or schedule is refused with those documents listed.",
     inputSchema: {
@@ -420,7 +422,7 @@ server.registerTool("client_delete", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("client_list", {
+server.registerTool("client_list", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "List clients", description: "List every stored client with id, address, email and VAT id. No arguments, and it writes nothing. With none stored it says so: invoice_create also creates a client from the name you pass.",
     inputSchema: {},
 }, async () => {
@@ -571,7 +573,7 @@ function createInvoice(a) {
         : undefined;
     return { invoice: inv, clientNote, businessNote: noBusiness ? NO_BUSINESS_NOTE : undefined };
 }
-server.registerTool("invoice_create", {
+server.registerTool("invoice_create", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Create an invoice",
     description: "Create an invoice from line items and return the record with its next, never-reused number. unit_price is in MAJOR units; lines are rounded then summed. One currency per invoice. Free: 3 a month.",
     inputSchema: {
@@ -600,7 +602,7 @@ server.registerTool("invoice_create", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("invoice_from_hours", {
+server.registerTool("invoice_from_hours", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Invoice from hours",
     description: "Shortcut for the common case: bill one client for N hours at an hourly rate. Creates and returns a single-line invoice, converting the rate into target_currency when you supply fx_rates, and echoing back any entry_ids.",
     inputSchema: {
@@ -686,7 +688,7 @@ server.registerTool("invoice_from_hours", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("invoice_list", {
+server.registerTool("invoice_list", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "List invoices",
     description: "List invoices by number: client, dates, currency, subtotal, discount, tax lines, total, status, paid, credited and the balance still due after any credit note. Filter by status, client and date range.",
     inputSchema: {
@@ -717,7 +719,7 @@ server.registerTool("invoice_list", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("invoice_get", {
+server.registerTool("invoice_get", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Get one invoice",
     description: "Return the full stored record for one invoice number, including every line, tax breakdown, and the balance still open after any credit note issued against it (see credited_minor).",
     inputSchema: { number: z.string() },
@@ -737,7 +739,7 @@ server.registerTool("invoice_get", {
         open: formatMoney(open_minor, inv.currency),
     });
 });
-server.registerTool("invoice_mark_paid", {
+server.registerTool("invoice_mark_paid", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     title: "Mark an invoice paid",
     description: "Record a payment on one invoice. amount is in MAJOR units and ADDS to what is paid, never replaces it; omit it to settle the rest. An overpayment is refused, naming the open balance.",
     inputSchema: {
@@ -802,7 +804,7 @@ server.registerTool("invoice_mark_paid", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("invoice_pdf", {
+server.registerTool("invoice_pdf", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Render invoice PDF",
     description: "Call this tool to write one stored invoice as an A4 PDF and return the path: issuer, BILL TO, dates, items, taxes and totals. Free stamps a credit line and no logo; Pro renders it unbranded with your logo.",
     inputSchema: {
@@ -841,7 +843,7 @@ server.registerTool("invoice_pdf", {
         return fail(String(e.message ?? e));
     }
 });
-server.registerTool("overdue_report", {
+server.registerTool("overdue_report", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     title: "Overdue report",
     description: "List every invoice not paid in full whose due date has passed, worst first, with days overdue and the amount, then a total per currency. Free. Use invoice_list for everything still open.",
     inputSchema: { as_of: z.string().optional().describe("YYYY-MM-DD, defaults to today") },

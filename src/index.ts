@@ -167,7 +167,7 @@ const server = new McpServer(
 
 const orderArg = str("work_order", MAX_NAME).describe("The work order id, e.g. WO-2026-0001, or the client name when only one job is theirs");
 
-server.registerTool("work_order_create", {
+server.registerTool("work_order_create", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Raise a work order",
   description: "Raise a job order and return its WO-YYYY-NNNN number: the client, the site address, the date it was asked for, what the job is and how urgent. Free tier: 5 open orders.",
   inputSchema: {
@@ -266,7 +266,7 @@ server.registerTool("work_order_create", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("work_order_add_line", {
+server.registerTool("work_order_add_line", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Add a parts or labour line",
   description: "Add one line: parts with quantity, unit_cost_minor in whole MINOR units and optional markup, or labour with hours and rate_minor. A line on an invoiced order, or dated before the request, is refused.",
   inputSchema: {
@@ -351,7 +351,7 @@ server.registerTool("work_order_add_line", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("work_order_status", {
+server.registerTool("work_order_status", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Move a work order along",
   description: "Move one work order exactly one step: draft, scheduled, in_progress, done, invoiced, stamping date and note. A skipped, backwards or backdated step is refused and nothing is written. Free.",
   inputSchema: {
@@ -398,7 +398,7 @@ server.registerTool("work_order_status", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("work_order_get", {
+server.registerTool("work_order_get", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Show one work order",
   description: "Return one work order in full by WO number or client: the site, every parts and labour line with the unit billed, hours, materials, net and VAT, and the status history. Reads only. Free.",
   inputSchema: { work_order: orderArg },
@@ -408,7 +408,7 @@ server.registerTool("work_order_get", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("work_order_list", {
+server.registerTool("work_order_list", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "List work orders",
   description: "List work orders newest requested first: status, priority, client, site, hours, labour, materials and net value, with totals per currency. Filter by status, client and requested-date range. Free.",
   inputSchema: {
@@ -451,7 +451,7 @@ server.registerTool("work_order_list", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("work_order_delete", {
+server.registerTool("work_order_delete", { annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
   title: "Delete a draft work order",
   description: "Delete a DRAFT work order with no lines, freeing an open slot. One past draft is refused, naming the date it got there, and so is one carrying lines. The WO number is never reissued. work_order_status moves it on.",
   inputSchema: { work_order: orderArg },
@@ -549,7 +549,7 @@ function reportText(o: WorkOrder): string {
   return out.join("\n");
 }
 
-server.registerTool("completion_report_text", {
+server.registerTool("completion_report_text", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   title: "Completion report as plain text",
   description: "Turn a work order into a plain-text completion report: what was done, the labour hours, the materials, the totals and a sign-off block, ready to paste into an email. Free on every tier.",
   inputSchema: { work_order: orderArg },
@@ -565,7 +565,7 @@ server.registerTool("completion_report_text", {
   } catch (e) { return fail((e as Error).message); }
 });
 
-server.registerTool("completion_report_pdf", {
+server.registerTool("completion_report_pdf", { annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   title: "Completion report as a PDF",
   description: "Call this tool to write the A4 completion report of one work order and return the file path: the lines, the hours, the materials, the totals and the sign-off block. Pro.",
   inputSchema: {
@@ -622,7 +622,7 @@ server.registerTool("completion_report_pdf", {
 
 /* ----------------------------------------------------------- invoice payload */
 
-server.registerTool("work_order_invoice_payload", {
+server.registerTool("work_order_invoice_payload", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Invoice payload for a work order",
   description: "Build an invoice_create-ready payload from the lines, with VAT at the shared profile rate. Writes nothing and marks nothing: raise the invoice in the invoice server, then set this order invoiced. Pro.",
   inputSchema: {
@@ -697,7 +697,7 @@ server.registerTool("work_order_invoice_payload", {
 
 /* ------------------------------------------------------------------- report */
 
-server.registerTool("work_orders_report", {
+server.registerTool("work_orders_report", { annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   title: "Report the board",
   description: "Report the whole board: how many work orders sit at each status, the hours logged this month, and the value not yet invoiced per currency, with the oldest open jobs named. Pro.",
   inputSchema: {
